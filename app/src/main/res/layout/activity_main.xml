@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/e_page">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- 머리줄: 앱 이름 + 정차/주행 + 설정 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="어디가세요?"
+                android:textColor="@color/e_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDrive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="6dp"
+                android:text="확인 중…"
+                android:textColor="@color/e_text3"
+                android:textSize="16sp" />
+
+            <!-- 설정: 누르는 영역 최소 48dp -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSettings"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:contentDescription="내 차 설정"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="56dp"
+                android:minHeight="56dp"
+                android:paddingHorizontal="12dp"
+                android:text=""
+                android:textColor="@color/e_text2"
+                android:textSize="14sp"
+                app:icon="@drawable/ic_settings"
+                app:iconPadding="0dp"
+                app:iconSize="28dp"
+                app:iconTint="@color/e_text" />
+        </LinearLayout>
+
+        <!-- 작은 알림 (3초, 소리 없음) -->
+        <TextView
+            android:id="@+id/tvNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_card"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            android:text=""
+            android:textColor="@color/e_text"
+            android:textSize="17sp"
+            android:visibility="gone" />
+
+        <!-- 카드 두 장: 전체 화면(가로로 넓음)이면 좌우, 분할 화면이면 위아래 (코드에서 바꿈) -->
+        <LinearLayout
+            android:id="@+id/cards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical">
+
+        <!-- 목적지 카드 -->
+        <LinearLayout
+            android:id="@+id/destCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내비 연결 중…"
+                android:textColor="@color/e_text2"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvDest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="목적지를 내비에 입력하면 여기에 보여요"
+                android:textColor="@color/e_text2"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textColor="@color/e_accent"
+                android:textSize="18sp" />
+
+            <!-- 현대 내비 지도 움직이기 (정차 중, 목적지가 있을 때만) -->
+            <LinearLayout
+                android:id="@+id/mapRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMapDest"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56dp"
+                    android:text="🗺️ 현대 지도에서 주차장 보기"
+                    android:textColor="@color/e_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:strokeColor="@color/e_text2"
+                    app:strokeWidth="2dp" />
+
+            </LinearLayout>
+
+            <!-- ② 혼잡 정보 묶음: 분할 화면은 여기, 전체 화면은 ② 카드로 옮겨요 -->
+            <LinearLayout
+                android:id="@+id/crowdGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvCrowd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="6dp"
+                android:text=""
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_soft"
+                android:padding="16dp"
+                android:text=""
+                android:textColor="@color/e_text"
+                android:textSize="20sp"
+                android:lineSpacingExtra="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLot2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="64dp"
+                android:text="2주차장으로 출발"
+                android:textColor="@color/e_primary_fg"
+                android:textSize="22sp"
+                app:backgroundTint="@color/e_primary_bg"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_parking"
+                app:iconGravity="textStart"
+                app:iconSize="26dp"
+                app:iconTint="@color/e_primary_fg" />
+            </LinearLayout>
+
+            <!-- 주차 완료 카드 (도착 + 기어 P) -->
+            <TextView
+                android:id="@+id/tvPark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_soft"
+                android:drawablePadding="12dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text=""
+                android:textColor="@color/e_text"
+                android:textSize="20sp"
+                android:lineSpacingExtra="4dp"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_parking"
+                app:drawableTint="@color/e_text" />
+
+            <!-- ⑤ 나갈 때 안내: 주차 중에만. 분할 화면은 여기, 전체 화면은 ⑤ 카드로 옮겨요 -->
+            <LinearLayout
+                android:id="@+id/exitGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvExit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_soft"
+                    android:lineSpacingExtra="4dp"
+                    android:padding="16dp"
+                    android:text=""
+                    android:textColor="@color/e_text"
+                    android:textSize="18sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:minHeight="60dp"
+                    android:text="추천 출구를 내비 경유지로 넣기"
+                    android:textColor="@color/e_primary_fg"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/e_primary_bg"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+
+            <!-- 신호 대기 중 묻기: 주행 중 + 브레이크 밟음 + 설정 켜짐일 때만 -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuickAsk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="72dp"
+                android:text="다 같이 묻기"
+                android:textColor="@color/e_on_accent"
+                android:textSize="24sp"
+                android:visibility="gone"
+                app:backgroundTint="@color/e_accent"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_campaign"
+                app:iconGravity="textStart"
+                app:iconSize="28dp"
+                app:iconTint="@color/e_on_accent" />
+
+            <!-- 신호 대기 중 인사: 묻기와 같은 조건에서만 -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuickHello"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="64dp"
+                android:text="👋 가까운 차에 인사하기"
+                android:textColor="@color/e_text"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/e_text"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+
+        <!-- 주변 차 카드 (정차 중에만 보임) -->
+        <LinearLayout
+            android:id="@+id/stopArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvRadarTitle"
+                android:text="주변 차"
+                android:textColor="@color/e_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- 전체 화면 전용: 목적지 주변 지도 -->
+            <app.eodigaseyo.DestMapView
+                android:id="@+id/destMap"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+            <!-- 레이더 묶음: 분할 화면은 여기, 전체 화면은 ① 카드로 옮겨요 -->
+            <LinearLayout
+                android:id="@+id/radarGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <app.eodigaseyo.RadarView
+                android:id="@+id/radar"
+                android:layout_width="match_parent"
+                android:layout_height="240dp" />
+
+            <!-- 레이더 범례 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:id="@+id/tvLegend"
+                android:text="●  같은 곳      ◌  같은 방향      ○  다른 방향·비공개"
+                android:textColor="@color/e_text2"
+                android:textSize="17sp" />
+            </LinearLayout>
+
+            <!-- ① 묻기 묶음: 분할 화면은 레이더 아래, 전체 화면은 ① 카드로 옮겨요 -->
+            <LinearLayout
+                android:id="@+id/askGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAsk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="60dp"
+                android:text="다 같이 묻기"
+                android:textColor="@color/e_on_accent"
+                android:textSize="20sp"
+                app:backgroundTint="@color/e_accent"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_campaign"
+                app:iconGravity="textStart"
+                app:iconSize="24dp"
+                app:iconTint="@color/e_on_accent" />
+
+            <TextView
+                android:id="@+id/tvAsk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="같은 곳 가는 차를 물어봐요"
+                android:textColor="@color/e_text3"
+                android:textSize="17sp" />
+
+                <!-- 👋 인사: 정차 중, 가장 가까운 차 한 대에게만 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHello"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:minHeight="56dp"
+                    android:text="👋 가까운 차에 인사하기"
+                    android:textColor="@color/e_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:strokeColor="@color/e_text2"
+                    app:strokeWidth="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 전체 화면 전용 카드 -->
+        <LinearLayout
+            android:id="@+id/cardAsk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="① 같은 곳 가는 차"
+                android:textColor="@color/e_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/askSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+
+
+        <!-- 전체 화면 전용: ④ 출발 시간 추천 (도착 전, 정차 중) -->
+        <LinearLayout
+            android:id="@+id/cardDepart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="④ 언제 출발할까요?"
+                android:textColor="@color/e_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/departBars"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal" />
+
+            <TextView
+                android:id="@+id/tvDepart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/e_text"
+                android:textSize="17sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDepartAlarm"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="56dp"
+                android:text="⏰ 그 시간에 알려주기"
+                android:textColor="@color/e_text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:strokeColor="@color/e_text2"
+                app:strokeWidth="2dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- 전체 화면 전용: ⑤ 나갈 때 안내 (주차 중) -->
+        <LinearLayout
+            android:id="@+id/cardExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⑤ 나갈 때 · 덜 붐비는 출구"
+                android:textColor="@color/e_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/exitSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+        </LinearLayout>
+
+        <!-- 시연용 버튼 (에뮬레이터에서 빠르게 전환) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnArriveSim"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도착 시연"
+                android:textColor="@color/e_text2"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btnSim"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주행 시연 켜기"
+                android:textColor="@color/e_text2"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

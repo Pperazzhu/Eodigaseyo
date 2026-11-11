@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 밤 색 (시스템이 야간 모드면 자동으로 이 색을 씀) -->
+<resources>
+    <color name="e_page">#0E1013</color>
+    <color name="e_card">#1A1D23</color>
+    <color name="e_card_stroke">#2A2F38</color>
+    <color name="e_soft">#22262E</color>
+    <color name="e_text">#F3F4F6</color>
+    <color name="e_text2">#9CA3AF</color>
+    <color name="e_text3">#D1D5DB</color>
+    <color name="e_accent">#4C8DFF</color>
+    <color name="e_on_accent">#FFFFFF</color>
+    <color name="e_primary_bg">#F3F4F6</color>
+    <color name="e_primary_fg">#111318</color>
+
+    <!-- 레이더 -->
+    <color name="e_radar_ring">#2E343E</color>
+    <color name="e_radar_line">#252A33</color>
+    <color name="e_radar_me">#F3F4F6</color>
+    <color name="e_radar_car">#6B7280</color>
+    <color name="e_radar_priv">#3A404B</color>
+    <color name="e_radar_dir">#2F4E8A</color>
+
+    <!-- 칩 -->
+    <color name="e_c0_bg">#123222</color>  <color name="e_c0_fg">#6EE7A0</color>
+    <color name="e_c1_bg">#3A2E0E</color>  <color name="e_c1_fg">#F5C451</color>
+    <color name="e_c2_bg">#3B1616</color>  <color name="e_c2_fg">#F87171</color>
+    <color name="e_c3_bg">#3A1028</color>  <color name="e_c3_fg">#F472B6</color>
+    <color name="e_stop_bg">#2A2F38</color> <color name="e_stop_fg">#D1D5DB</color>
+    <color name="e_drive_bg">#1B2A4A</color> <color name="e_drive_fg">#8AB4FF</color>
+</resources>

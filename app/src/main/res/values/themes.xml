@@ -1,0 +1,14 @@
+<resources>
+    <!-- 앱 테마: 색은 eodiga_colors.xml(낮)·values-night(밤)에서 가져와 야간 모드에 자동으로 맞춰요.
+         대화상자 버튼·스위치도 앱 강조색(파랑)으로 보여요. 머리줄(액션바)은 쓰지 않아요. -->
+    <style name="Theme.Eodigaseyo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/e_accent</item>
+        <item name="colorPrimaryVariant">@color/e_accent</item>
+        <item name="colorOnPrimary">@color/e_on_accent</item>
+        <item name="colorSecondary">@color/e_accent</item>
+        <item name="colorSecondaryVariant">@color/e_accent</item>
+        <item name="colorOnSecondary">@color/e_on_accent</item>
+        <item name="android:statusBarColor">@color/e_page</item>
+        <item name="android:windowBackground">@color/e_page</item>
+    </style>
+</resources>
